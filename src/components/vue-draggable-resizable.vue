@@ -23,6 +23,7 @@
       @mousedown.stop.prevent="handleDown(handle, $event)"
       @touchstart.stop.prevent="handleDown(handle, $event)"
     ></div>
+    <p>{{parentW}}X{{parentH}}</p>
     <slot></slot>
   </div>
 </template>
@@ -33,6 +34,7 @@ import { matchesSelectorToParentElements } from '../utils/dom'
 export const VueDraggable = {
   replace: true,
   name: 'VueDraggableResizable',
+
   props: {
     active: {
       type: Boolean, default: false
@@ -45,28 +47,28 @@ export const VueDraggable = {
     },
     w: {
       type: Number,
-      default: 200,
+      default: 20,
       validator: function (val) {
         return val > 0
       }
     },
     h: {
       type: Number,
-      default: 200,
+      default: 20,
       validator: function (val) {
         return val > 0
       }
     },
     minw: {
       type: Number,
-      default: 50,
+      default: 10,
       validator: function (val) {
         return val >= 0
       }
     },
     minh: {
       type: Number,
-      default: 50,
+      default: 10,
       validator: function (val) {
         return val >= 0
       }
@@ -154,10 +156,12 @@ export const VueDraggable = {
     this.elmW = 0
     this.elmH = 0
   },
+
   mounted: function () {
     document.documentElement.addEventListener('mousemove', this.handleMove, true)
     document.documentElement.addEventListener('mousedown', this.deselect, true)
     document.documentElement.addEventListener('mouseup', this.handleUp, true)
+    window.addEventListener('resize', this.onWindowResize, true)
 
     // touch events bindings
     document.documentElement.addEventListener('touchmove', this.handleMove, true)
@@ -169,12 +173,15 @@ export const VueDraggable = {
     this.elmW = this.$el.offsetWidth || this.$el.clientWidth
     this.elmH = this.$el.offsetHeight || this.$el.clientHeight
 
+    this.onWindowResize()
     this.reviewDimensions()
   },
+
   beforeDestroy: function () {
     document.documentElement.removeEventListener('mousemove', this.handleMove, true)
     document.documentElement.removeEventListener('mousedown', this.deselect, true)
     document.documentElement.removeEventListener('mouseup', this.handleUp, true)
+    window.removeEventListener('resize', this.onWindowResize, true)
 
     // touch events bindings removed
     document.documentElement.addEventListener('touchmove', this.handleMove, true)
@@ -192,30 +199,34 @@ export const VueDraggable = {
       dragging: false,
       enabled: this.active,
       handle: null,
-      zIndex: this.z
+      zIndex: this.z,
+      parentW: this.$el ? this.$el.parentElement.clientWidth : 0,
+      parentH: this.$el ? this.$el.parentElement.clientHeight : 0
     }
   },
 
   methods: {
-    reviewDimensions: function () {
-      if (this.minw > this.w) this.width = this.minw
+    onWindowResize: function () {
+      this.parentW = this.$el.parentElement.clientWidth
+      this.parentH = this.$el.parentElement.clientHeight
+    },
 
-      if (this.minh > this.h) this.height = this.minh
+    reviewDimensions: function () {
+      console.log('reviewDimensions')
+      const x = parseInt(this.$el.style.left.slice(0, -1), 10)
+      const y = parseInt(this.$el.style.top.slice(0, -1), 10)
+      const w = parseInt(this.$el.style.width.slice(0, -1), 10)
+      const h = parseInt(this.$el.style.height.slice(0, -1), 10)
+
+      if (this.minw > w) this.width = this.minw
+
+      if (this.minh > h) this.height = this.minh
 
       if (this.parent) {
-        const parentW = parseInt(this.$el.parentNode.clientWidth, 10)
-        const parentH = parseInt(this.$el.parentNode.clientHeight, 10)
-
-        this.parentW = parentW
-        this.parentH = parentH
-
-        if (this.w > this.parentW) this.width = parentW
-
-        if (this.h > this.parentH) this.height = parentH
-
-        if ((this.x + this.w) > this.parentW) this.width = parentW - this.x
-
-        if ((this.y + this.h) > this.parentH) this.height = parentH - this.y
+        if (w > 100) this.width = 100
+        if (h > 100) this.height = 100
+        if ((x + w) > 100) this.left = 100 - w
+        if ((y + h) > 100) this.top = 100 - h
       }
 
       this.elmW = this.width
@@ -223,7 +234,9 @@ export const VueDraggable = {
 
       this.$emit('resizing', this.left, this.top, this.width, this.height)
     },
+
     elmDown: function (e) {
+      console.log('elmDown')
       const target = e.target || e.srcElement
 
       if (this.$el.contains(target)) {
@@ -247,7 +260,9 @@ export const VueDraggable = {
         }
       }
     },
+
     deselect: function (e) {
+      console.log('deselect')
       if (e.type.indexOf('touch') !== -1) {
         this.mouseX = e.changedTouches[0].clientX
         this.mouseY = e.changedTouches[0].clientY
@@ -271,7 +286,9 @@ export const VueDraggable = {
         }
       }
     },
+
     handleDown: function (handle, e) {
+      console.log('handleDown')
       this.handle = handle
 
       if (e.stopPropagation) e.stopPropagation()
@@ -279,7 +296,9 @@ export const VueDraggable = {
 
       this.resizing = true
     },
+
     fillParent: function (e) {
+      console.log('fillParent')
       if (!this.parent || !this.resizable || !this.maximize) return
 
       let done = false
@@ -335,7 +354,9 @@ export const VueDraggable = {
 
       window.requestAnimationFrame(animate)
     },
+
     handleMove: function (e) {
+      // console.log('handleMove')
       const isTouchMove = e.type.indexOf('touchmove') !== -1
       this.mouseX = isTouchMove
         ? e.touches[0].clientX
@@ -344,8 +365,8 @@ export const VueDraggable = {
         ? e.touches[0].clientY
         : e.pageY || e.clientY + document.documentElement.scrollTop
 
-      let diffX = this.mouseX - this.lastMouseX + this.mouseOffX
-      let diffY = this.mouseY - this.lastMouseY + this.mouseOffY
+      let diffX = (this.mouseX - this.lastMouseX + this.mouseOffX) * 100 / this.parentW
+      let diffY = (this.mouseY - this.lastMouseY + this.mouseOffY) * 100 / this.parentH
 
       this.mouseOffX = this.mouseOffY = 0
 
@@ -388,6 +409,7 @@ export const VueDraggable = {
         this.width = (Math.round(this.elmW / this.grid[0]) * this.grid[0])
         this.height = (Math.round(this.elmH / this.grid[1]) * this.grid[1])
 
+        this.reviewDimensions()
         this.$emit('resizing', this.left, this.top, this.width, this.height)
       } else if (this.dragging) {
         if (this.parent) {
@@ -408,10 +430,13 @@ export const VueDraggable = {
           this.top = (Math.round(this.elmY / this.grid[1]) * this.grid[1])
         }
 
+        this.reviewDimensions()
         this.$emit('dragging', this.left, this.top)
       }
     },
+
     handleUp: function (e) {
+      console.log('handleUp')
       if (e.type.indexOf('touch') !== -1) {
         this.lastMouseX = e.changedTouches[0].clientX
         this.lastMouseY = e.changedTouches[0].clientY
@@ -434,10 +459,10 @@ export const VueDraggable = {
   computed: {
     style: function () {
       return {
-        top: this.top + 'px',
-        left: this.left + 'px',
-        width: this.width + 'px',
-        height: this.height + 'px',
+        top: this.top + '%',
+        left: this.left + '%',
+        width: this.width + '%',
+        height: this.height + '%',
         zIndex: this.zIndex
       }
     }
@@ -455,7 +480,7 @@ export const VueDraggable = {
   }
 }
 
-export default VueDraggable;
+export default VueDraggable
 </script>
 
 <style scoped>

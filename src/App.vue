@@ -1,6 +1,16 @@
 <template>
   <div id="app">
-    <div style="height: 500px; width: 500px; margin: 20px; border: 1px solid red; position: relative;">
+
+    <VueDraggableFrame>
+      <VueDraggableResizable :x="25" :y="25" :w="10" :h="5" :parent="true">
+        <p>Component</p>
+      </VueDraggableResizable>
+      <VueDraggableResizable :x="70" :y="70" :w="5" :h="25" :parent="true">
+        <p>Component</p>
+      </VueDraggableResizable>
+    </VueDraggableFrame>
+
+    <!-- <div style="height: 500px; width: 500px; margin: 20px; border: 1px solid red; position: relative;">
       <VueDraggableResizable :x="50" :y="50" :w="400" :h="400" :parent="true">
         <p>Component</p>
       </VueDraggableResizable>
@@ -28,17 +38,19 @@
           =
         </span>
       </VueDraggableResizable>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import VueDraggableResizable from './components/vue-draggable-resizable'
+import VueDraggableFrame from './components/vue-draggable-frame'
 
 export default {
   name: 'app',
   components: {
-    VueDraggableResizable
+    VueDraggableResizable,
+    VueDraggableFrame
   }
 }
 </script>
@@ -62,5 +74,8 @@ export default {
   }
   .vdr {
     background: white;
+  }
+  .vdr-frame {
+    background-color: rgb(190, 190, 190);
   }
 </style>

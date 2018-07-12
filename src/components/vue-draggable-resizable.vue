@@ -463,6 +463,9 @@ export default VueDraggable;
     position: absolute;
     box-sizing: border-box;
   }
+  .vdr img {
+    pointer-events: none;
+  }
   .handle {
     box-sizing: border-box;
     display: none;

@@ -21,7 +21,7 @@
 
 ### Features
 
-* No dependencies
+* No dependencies `NOTE: Typescript headers has dependencies`
 * Use draggable, resizable or both
 * Define handles for resizing
 * Restrict size and movement to parent element
@@ -30,14 +30,17 @@
 
 ### Demo
 
-[Demo](https://mauricius.github.io/vue-draggable-resizable/)
+[Demo OUTDATED](https://mauricius.github.io/vue-draggable-resizable/)
+For demo download and run `npm i; npm run dev`
 
 ---
 
 ## Install and basic usage
 
+Yeah I know, I'm to lazy for npm
+
 ```bash
-$ npm install --save vue-draggable-resizable
+$ npm install --save "https://github.com/kaaboaye/vue-draggable-resizable.git"
 ```
 
 
@@ -45,21 +48,23 @@ Register the component
 
 ```js
 import Vue from 'vue'
-import VueDraggableResizable from 'vue-draggable-resizable'
+import { VueDraggable, VueDraggableFrame } from 'vue-draggable-resizable'
 
-Vue.component('vue-draggable-resizable', VueDraggableResizable)
+// This may work but I'm not sure. Take a loot at ./src/App.vue
+Vue.component('vue-draggable-resizable', VueDraggable) ???
+Vue.component('vue-draggable-resizable', VueDraggableFrame) ???
 ```
 
 You may now use the component in your markup
 
 ```vue
 <template>
-  <div style="height: 500px; width: 500px; border: 1px solid red; position: relative;">
+  <VueDraggableFrame :rate="16/9">
     <vue-draggable-resizable :w="100" :h="100" v-on:dragging="onDrag" v-on:resizing="onResize" :parent="true">
       <p>Hello! I'm a flexible component. You can drag me around and you can resize me.<br>
       X: {{ x }} / Y: {{ y }} - Width: {{ width }} / Height: {{ height }}</p>
     </vue-draggable-resizable>
-  </div>
+  </VueDraggableFrame>
 </template>
 
 <script>
@@ -128,7 +133,7 @@ Defines it the component should be resizable or not.
 #### w
 Type: `Number`<br>
 Required: `false`<br>
-Default: `200`
+Default: `20`
 
 Define the initial width of the element.
 
@@ -139,7 +144,7 @@ Define the initial width of the element.
 #### h
 Type: `Number`<br>
 Required: `false`<br>
-Default: `200`
+Default: `20`
 
 Define the initial height of the element.
 
@@ -150,7 +155,7 @@ Define the initial height of the element.
 #### minw
 Type: `Number`<br>
 Required: `false`<br>
-Default: `50`
+Default: `10`
 
 Define the minimal width of the element.
 
@@ -161,7 +166,7 @@ Define the minimal width of the element.
 #### minh
 Type: `Number`<br>
 Required: `false`<br>
-Default: `50`
+Default: `10`
 
 Define the minimal height of the element.
 
@@ -380,7 +385,7 @@ If `resizing`, `parent` and `maximize` props are `true` you can double-click on 
 - [x] Touch support (thanks @ojczeo)
 - [ ] Fix grid issues (#34, #58) - In progress
 - [ ] Implement Storybook - In progress
-- [ ] Aspect ratio on resizing (#26) - In progress
+- [x] Aspect ratio on resizing (#26) by @kaaboaye
 - [ ] `maxWidth` and `maxHeight` props (#76) - In progress
 - [ ] Different approach with CSS styles (#73)
 - [ ] Watching props for changes (requires refactoring and possibly breaking changes)

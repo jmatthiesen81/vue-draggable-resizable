@@ -212,7 +212,6 @@ export const VueDraggable = {
     },
 
     reviewDimensions: function () {
-      console.log('reviewDimensions')
       const x = parseInt(this.$el.style.left.slice(0, -1), 10)
       const y = parseInt(this.$el.style.top.slice(0, -1), 10)
       const w = parseInt(this.$el.style.width.slice(0, -1), 10)
@@ -236,7 +235,6 @@ export const VueDraggable = {
     },
 
     elmDown: function (e) {
-      console.log('elmDown')
       const target = e.target || e.srcElement
 
       if (this.$el.contains(target)) {
@@ -262,7 +260,6 @@ export const VueDraggable = {
     },
 
     deselect: function (e) {
-      console.log('deselect')
       if (e.type.indexOf('touch') !== -1) {
         this.mouseX = e.changedTouches[0].clientX
         this.mouseY = e.changedTouches[0].clientY
@@ -288,7 +285,6 @@ export const VueDraggable = {
     },
 
     handleDown: function (handle, e) {
-      console.log('handleDown')
       this.handle = handle
 
       if (e.stopPropagation) e.stopPropagation()
@@ -298,7 +294,6 @@ export const VueDraggable = {
     },
 
     fillParent: function (e) {
-      console.log('fillParent')
       if (!this.parent || !this.resizable || !this.maximize) return
 
       let done = false
@@ -356,7 +351,6 @@ export const VueDraggable = {
     },
 
     handleMove: function (e) {
-      // console.log('handleMove')
       const isTouchMove = e.type.indexOf('touchmove') !== -1
       this.mouseX = isTouchMove
         ? e.touches[0].clientX
@@ -436,7 +430,6 @@ export const VueDraggable = {
     },
 
     handleUp: function (e) {
-      console.log('handleUp')
       if (e.type.indexOf('touch') !== -1) {
         this.lastMouseX = e.changedTouches[0].clientX
         this.lastMouseY = e.changedTouches[0].clientY

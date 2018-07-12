@@ -89,5 +89,10 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 9"
-  ]
+  ],
+  "dependencies": {
+    "@types/vue": "^2.0.0",
+    "typescript": "^2.9.2",
+    "vue": "^2.5.16"
+  }
 }

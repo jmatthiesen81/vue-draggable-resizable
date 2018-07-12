@@ -23,7 +23,6 @@
       @mousedown.stop.prevent="handleDown(handle, $event)"
       @touchstart.stop.prevent="handleDown(handle, $event)"
     ></div>
-    <p>{{parentW}}X{{parentH}}</p>
     <slot></slot>
   </div>
 </template>

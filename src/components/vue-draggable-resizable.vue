@@ -30,7 +30,7 @@
 <script>
 import { matchesSelectorToParentElements } from '../utils/dom'
 
-export default {
+export const VueDraggable = {
   replace: true,
   name: 'VueDraggableResizable',
   props: {
@@ -454,6 +454,8 @@ export default {
     }
   }
 }
+
+export default VueDraggable;
 </script>
 
 <style scoped>

@@ -1,0 +1,1 @@
+export { VueDraggable } from './src/components/vue-draggable-resizable.vue';

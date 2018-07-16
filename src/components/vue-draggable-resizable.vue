@@ -48,14 +48,14 @@ export const VueDraggable = {
       type: Number,
       default: 20,
       validator: function (val) {
-        return val > 0
+        return val >= 0
       }
     },
     h: {
       type: Number,
       default: 20,
       validator: function (val) {
-        return val > 0
+        return val >= 0
       }
     },
     minw: {

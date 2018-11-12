@@ -22,6 +22,7 @@
       :style="{ display: enabled ? 'block' : 'none'}"
       @mousedown.stop.prevent="handleDown(handle, $event)"
       @touchstart.stop.prevent="handleDown(handle, $event)"
+      @touchend.stop.prevent="handleUp($event)"
     ></div>
     <slot></slot>
   </div>
